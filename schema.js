@@ -20,7 +20,10 @@
 
 	type Query{
 		getAllRecipes:[Recipe]
+
+		getCurrentUser: User
 	}
+
 
 	type Token{
 		token : String!
@@ -34,7 +37,10 @@
 			 category:String!,
 			  instructions:String!,
 			   username:String ):Recipe
-		signupUser(username:String!, email:String!, password:String!):Token
+			   
+		
+			   siginUser(username:String!, password:String!):Token
+			   signupUser(username:String!, email:String!, password:String!):Token
 
 	}
 	`;
