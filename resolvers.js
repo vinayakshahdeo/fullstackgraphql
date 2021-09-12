@@ -1,5 +1,5 @@
 	const jwt = require("jsonwebtoken");
-
+	const bcrypt = require("bcrypt")
 	const createToken = (user, secret, expiresIn) => {
 
 		const {
@@ -23,6 +23,19 @@
 			}) => {
 				const allRecipes = await Recipe.find();
 				return allRecipes;
+			},
+			getCurrentUser: async (root, args, {
+				currentUser,
+				User
+			}) => {
+				if (!currentUser) return null;
+				const user = await User.findOne({
+					username: currentUser.username
+				}).populate({
+					path: "favorites",
+					model: "Recipe"
+				})
+				return user;
 			}
 		},
 		Mutation: {
@@ -45,6 +58,26 @@
 
 				return newRecipe;
 			},
+
+			siginUser: async (root, {
+				username,
+				password
+			}, {
+				User
+			}) => {
+				const user = await User.findOne({
+					username
+				});
+				if (!user) {
+					throw new Error("User Not Found");
+				}
+
+				const isValidPassword = await bcrypt.compare(password, user.password)
+				if (!isValidPassword) throw new Error("invalid Password");
+				return {
+					token: createToken(user, process.env.SECRET, "1hr")
+				}
+			},
 			signupUser: async (root, {
 				username,
 				email,
@@ -53,7 +86,9 @@
 				User
 			}) => {
 
-				const user = await User.findOne({username})
+				const user = await User.findOne({
+					username
+				})
 
 				if (user) {
 					throw new Error("User already Exists");
