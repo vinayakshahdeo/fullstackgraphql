@@ -36,26 +36,26 @@
 					model: "Recipe"
 				})
 				return user;
+			},
+			getRecipe: async (root,{_id}, {Recipe})=>{
+				const recipe = await Recipe.findOne({_id});
+				return recipe;
 			}
 		},
 		Mutation: {
-			addRecipe: async (root, {
-				name,
-				description,
-				category,
-				instructions,
-				username
-			}, {
-				Recipe
-			}) => {
+			addRecipe: async (
+				root,
+				{ name, imageUrl, description, category, instructions, username },
+				{ Recipe }
+			  ) => {
 				const newRecipe = await new Recipe({
-					name,
-					description,
-					category,
-					instructions,
-					username
-				}).save()
-
+				  name,
+				  imageUrl,
+				  description,
+				  category,
+				  instructions,
+				  username
+				}).save();
 				return newRecipe;
 			},
 

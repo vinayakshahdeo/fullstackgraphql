@@ -14,6 +14,7 @@ import { Navbar } from './components/Navbar';
 import Search from './components/Recipe/Search';
 import Profile from './components/Profile/Profile';
 import AddRecipe from './components/Recipe/AddRecipe';
+import RecipePage from './components/Recipe/RecipePage';
 
 
 const client = new ApolloClient({
@@ -51,7 +52,9 @@ const Root = ({refetch, session}) =>(
 
 		<Route exact path="/profile" component={Profile} />	
 
-		<Route exact path="/recipe/add" component={AddRecipe} />	
+		<Route exact path="/recipe/add" render={ () => <AddRecipe session={session}/>} />	
+
+		<Route exact path="/recipe/:_id" component={RecipePage} />	
 
 		<Route exact path="/search" component={Search} />	
 
