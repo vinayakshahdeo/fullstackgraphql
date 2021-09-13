@@ -22,6 +22,8 @@
 		getAllRecipes:[Recipe]
 
 		getCurrentUser: User
+
+		getRecipe(_id:ID!):Recipe
 	}
 
 
@@ -31,15 +33,11 @@
 
 	type Mutation{
 
-		addRecipe(
-			name:String!,
-			 description:String!,
-			 category:String!,
-			  instructions:String!,
-			   username:String ):Recipe
+		addRecipe(name: String!, description: String!, category: String!, instructions: String!, username: String): Recipe
 			   
 		
 			   siginUser(username:String!, password:String!):Token
+			   
 			   signupUser(username:String!, email:String!, password:String!):Token
 
 	}

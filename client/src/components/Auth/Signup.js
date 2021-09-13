@@ -28,7 +28,6 @@ export const Signup = withRouter(({history, ...props}) => {
 	const handleSubmit=(event, signupUser) => {
 		event.preventDefault();
 		signupUser().then(async ({data})=>{
-			console.log(data);
 			localStorage.setItem("token", data.signupUser.token);
 			await props.refetch();
 			setUsername("");
