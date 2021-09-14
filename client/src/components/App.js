@@ -15,7 +15,7 @@ import Error from './Error';
 				if(loading) return <div>Loading...</div>
 
 				if(error) return(<Error error={error}/>)
-
+console.log(data)
 				return(<ul>{data.getAllRecipes.map((recipe)=><RecipeItem key={recipe._id} {...recipe}/>)}</ul>)
 			}}
 
