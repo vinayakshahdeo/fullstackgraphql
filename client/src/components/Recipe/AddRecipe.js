@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Mutation } from "react-apollo";
-import { ADD_RECIPE } from '../../queries';
+import { ADD_RECIPE, GET_ALL_RECIPES } from '../../queries';
 import Error from "../Error";
+import { withRouter } from "react-router-dom";
 
 
-
-const AddRecipe = ({session:{getCurrentUser}}) => {
+const AddRecipe = ({session:{getCurrentUser}, history, ...props}) => {
 
 	const [name, setName]=useState("")
 	const [category, setCategory]=useState("Breakfast")
@@ -39,10 +39,25 @@ const AddRecipe = ({session:{getCurrentUser}}) => {
 		event.preventDefault();
 		addRecipe().then(async ({data})=>{
 			console.log(data)
+			setName("");
+			setDescription("");
+			setInstructions("");
+			setCategory("Breakfast");
+			history.push("/");
 		})
 	}
 
 	const validateForm = () => !name||!category||!description||!instructions;
+
+	const updateCache = (cache, {data:{addRecipe}})=>{
+	const {getAllRecipes}= cache.readQuery({query: GET_ALL_RECIPES})
+	cache.writeQuery({
+		query: GET_ALL_RECIPES,
+		data:{
+			getAllRecipes:[addRecipe, ...getAllRecipes]
+		}
+	})
+	}
 
     return (
 		<div className="App">
@@ -56,6 +71,7 @@ const AddRecipe = ({session:{getCurrentUser}}) => {
 			instructions,
 			username
 		  }}
+		  update={updateCache}
 		>
 		  {(addRecipe, { data, loading, error }) => {
 			return (
@@ -111,4 +127,4 @@ const AddRecipe = ({session:{getCurrentUser}}) => {
 	  );
 }
 
-export default AddRecipe;
+export default withRouter(AddRecipe);
